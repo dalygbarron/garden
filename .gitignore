@@ -1,0 +1,7 @@
+garden
+gen-prod/*
+gen-test/*
+gen-dbg/*
+.sconsign.dblite
+.vscode/*
+*.swp

@@ -1,0 +1,58 @@
+import sys
+
+libs = [
+    'sfml-graphics',
+    'sfml-system',
+    'sfml-audio',
+    'sfml-window',
+    'luajit-5.1',
+    'm',
+    'dl'
+]
+cflags = [
+    '-std=c++17',
+    '-fdiagnostics-color=always'
+]
+lflags = []
+
+if sys.platform != 'darwin':
+    libs.append('GL')
+else:
+    cflags.append('-mmacosx-version-min=10.15')
+    cflags.append('-stdlib=libc++')
+    lflags.append(['-pagezero_size', '10000'])
+    lflags.append(['-image_base', '10000000'])
+
+mainSources = Glob('src/main/*.cc')
+testSources = Glob('src/test/*.cc')
+
+debugEnv = Environment(
+    LIBS=libs,
+    FRAMEWORKS=['OpenGl'],
+    CXXFLAGS=cflags + ['-g'],
+    LINKFLAGS=lflags
+)
+goodEnv = Environment(
+    LIBS=libs,
+    FRAMEWORKS=['OpenGl'],
+    CXXFLAGS=cflags,
+    LINKFLAGS=lflags
+)
+
+debugEnv.VariantDir('gen-dbg', 'src', duplicate=0)
+goodEnv.VariantDir('gen-prod', 'src', duplicate=0)
+debug = debugEnv.Program(
+    'debug',
+    Glob('gen-dbg/main/*.cc') + ['gen-dbg/main.cc']
+)
+tester = debugEnv.Program(
+    'tester',
+    Glob('gen-dbg/*/*.cc') + ['gen-dbg/catch.cc']
+)
+prod = goodEnv.Program(
+    'garden',
+    Glob('gen-prod/main/*.cc') + ['gen-prod/main.cc']
+)
+
+Default(prod)
+

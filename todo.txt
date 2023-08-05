@@ -1,0 +1,31 @@
+gui system.
+
+So there are two tiers to this so to speak, firstly there is a set of functions
+which can be part of the TileRenderer which can do most of the stuff necessary
+to render gui elements, which means these can also be used to render non
+interactive hud stuff that looks like gui things.
+
+Then we also have gui elements themselves. This will be class based and
+heirachical, because when we want to receive user input we can pass a gui
+object to the function that draws the screen and waits for input, and it will
+run it until the gui element is "finished". There will also be a version that
+does not have a gui element and just waits for key presses.
+
+Now, layout. I will probably just implement buttons as text that can be coloured
+to tell you that it is selected or whatever. To be honest, buttons might be the
+only basic type of gui element in a game like this. Layout will just be taking
+the amount of space given and dividing it evenly. If text cannot fit within the
+space given it will marquee.
+
+Ideally the tile renderer itself should have a function to render text that also
+marquees it into a given area based on some kind of clock. Also need to make it
+that text can be coloured. Whatever system I use there it should ideally work
+both with marqueed text and line broken text.
+
+Line broken text also needs to be able to be implemented, probably we will just
+make it that if it does not fit within it's allotted space it truncates it,
+rather than deal with dynamically sizing the parent container.
+
+ok so first thing to implement is rendering marquee text, then normal text, then
+we can implement gui elements, then implement the function where it loops and
+runs them etc.
